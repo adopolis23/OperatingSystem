@@ -1,8 +1,9 @@
 #include <unistd.h>
 #include <sys/wait.h> 
-#include <string.h>
 
 #define BUFFER_SIZE 128
+
+int real_waitid(idtype_t idtype, id_t id, siginfo_t *infop, int options, void *unused);
 
 int main()
 {
@@ -12,36 +13,31 @@ int main()
 
     while (1)
     {
-
         write(1, "### > ", 6);
 
         int num_read = read(0, buffer, BUFFER_SIZE);
+        if (num_read <= 0)
+        {
+            continue;
+        }
+
         buffer[num_read-1] = '\0';
-
-        
-        const char* prefix = "/bin/";
-
-        strcpy(command, prefix);
-        strcat(command, buffer);
 
 
         int fork_status = fork();
 
         // we are in the child process -> execute command
-        if (fork_status == 0)
-        {
-            execve(command, 0, 0);
-
-            _exit(2);
-        }
-        // we are in the parent -> wait for child
-        else
-        {
-            siginfo_t* info;
-            waitid(P_PID, fork_status, info, WEXITED);
+        if (fork_status == 0) {
+            char *args[] = { buffer, NULL };
+            execve(buffer, args, NULL);
+            break;
+        } else {
+            // we are in the parent process -> wait child
+            siginfo_t info;
+            real_waitid(P_PID, fork_status, &info, WEXITED, 0);
         }
 
     }
     
-
+    _exit(0);
 }
