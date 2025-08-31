@@ -5,3 +5,4 @@ Shell/build
 *.elf
 stage2_eltorito
 build
+*.iso
