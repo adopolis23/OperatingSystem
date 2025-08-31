@@ -3,3 +3,5 @@
 *.o
 Shell/build
 *.elf
+stage2_eltorito
+build
