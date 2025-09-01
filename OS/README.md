@@ -1,7 +1,7 @@
 
 # Main Operating System Code
 
-### Running with QEMU
+## Running with QEMU
 
 when running with QEMU run with:
 ```
@@ -12,8 +12,12 @@ Then in terminal you can inspect registers with:
 info registers
 ```
 
+## Writing Text
 
-### Notes
+Text is written to the console with the `framebuffer` which is memory mapped IO. Starting address for the framebuffer is `0x000B8000`. Character in each cell is determined by 2 bytes (8: Char, 4: Foreground, 4: Background).
+
+
+## Notes
 
 When creating structs for configuration bytes make sure packed attribute is set to avoid compiler GCC adding any padding.
 ```C

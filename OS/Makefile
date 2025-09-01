@@ -45,6 +45,8 @@ $(C_OBJ): $(C_SRC) | $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
+
+#wget -O stage2_eltorito https://github.com/littleosbook/littleosbook/raw/master/files/stage2_eltorito
 # Build ISO
 $(ISO): stage2_eltorito $(KERNEL)
 	mkdir -p iso/boot/grub
