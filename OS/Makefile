@@ -4,39 +4,50 @@
 AS = nasm
 ASFLAGS = -f elf32
 LD = ld
-LDFLAGS = -T link.ld -melf_i386
+LDFLAGS = -T src/link.ld -melf_i386
 
 # Files and directories
-SRC = loader.s
-BUILD_DIR = build
-OBJ = $(BUILD_DIR)/loader.o
-KERNEL = $(BUILD_DIR)/kernel.elf
+AS_SRC = src/loader.s
+AS_OBJ = $(BUILD_DIR)/loader.o
 
-# Default target
+C_SRC = src/kmain.c
+C_OBJ = $(BUILD_DIR)/kmain.o
+
+OBJS = $(AS_OBJ) $(C_OBJ)
+
+BUILD_DIR = build
+
+KERNEL = $(BUILD_DIR)/kernel.elf
+ISO = os.iso
+
+
+
+
+
+# Default target (build kernel)
 all: $(KERNEL)
 
 # Linking
-$(KERNEL): $(OBJ) link.ld
-	$(LD) $(LDFLAGS) $(OBJ) -o $@
+$(KERNEL): $(OBJS) src/link.ld
+	$(LD) $(LDFLAGS) $(OBJS) -o $@
 
 # Assembling
-$(OBJ): $(SRC) | $(BUILD_DIR)
+$(AS_OBJ): $(AS_SRC) | $(BUILD_DIR)
 	$(AS) $(ASFLAGS) -o $@ $<
+
+# Compiling C
+$(C_OBJ): $(C_SRC) | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -o $@ $<
 
 # Ensure build directory exists
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-# Clean build artifacts
-clean:
-	rm -rf $(BUILD_DIR)
-	rm -rf iso/boot/kernel.elf
-	rm os.iso
-
-#wget -O stage2_eltorito https://github.com/littleosbook/littleosbook/raw/master/files/stage2_eltorito
-iso: iso/boot/kernel.elf os.iso
-	cp stage2_eltorito iso/boot/grub
-	cp build/kernel.elf iso/boot/
+# Build ISO
+$(ISO): stage2_eltorito $(KERNEL)
+	mkdir -p iso/boot/grub
+	cp stage2_eltorito iso/boot/grub/
+	cp $(KERNEL) iso/boot/kernel.elf
 
 	genisoimage -R \
 		-b boot/grub/stage2_eltorito \
@@ -46,5 +57,14 @@ iso: iso/boot/kernel.elf os.iso
 		-input-charset utf8 \
 		-quiet \
 		-boot-info-table \
-		-o os.iso \
+		-o $@ \
 		iso
+
+# Convenience alias
+iso: $(ISO)
+
+# Clean build artifacts
+clean:
+	rm -rf $(BUILD_DIR)
+	rm -rf iso/boot/kernel.elf
+	rm -f $(ISO)
