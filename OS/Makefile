@@ -4,7 +4,9 @@
 AS = nasm
 ASFLAGS = -f elf32
 LD = ld
+CC = gcc
 LDFLAGS = -T src/link.ld -melf_i386
+CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs
 
 # Files and directories
 AS_SRC = src/loader.s
@@ -37,7 +39,7 @@ $(AS_OBJ): $(AS_SRC) | $(BUILD_DIR)
 
 # Compiling C
 $(C_OBJ): $(C_SRC) | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Ensure build directory exists
 $(BUILD_DIR):

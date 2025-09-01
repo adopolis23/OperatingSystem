@@ -1,6 +1,16 @@
 
 # Main Operating System Code
 
+### Running with QEMU
+
+when running with QEMU run with:
+```
+qemu-system-i386 -cdrom os.iso -monitor stdio
+```
+Then in terminal you can inspect registers with:
+```
+info registers
+```
 
 
 ### Notes

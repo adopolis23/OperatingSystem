@@ -2,5 +2,5 @@
 
 void kmain(void)
 {
-    return 3405692606;
+    asm("movl $0xCAFEBABE, %eax");
 }
