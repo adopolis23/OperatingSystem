@@ -12,11 +12,13 @@ void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg)
 void print_message_beginning_fb(char* message, unsigned char fg, unsigned char bg)
 {
     int index = 0;
+    int fb_index = 0;
 
     while (message[index] != '\0')
     {
-        fb_write_cell(index, message[index], fg, bg);
+        fb_write_cell(fb_index, message[index], fg, bg);
         index = index + 1;
+        fb_index = fb_index + 2;
     }
     
 }
@@ -24,5 +26,11 @@ void print_message_beginning_fb(char* message, unsigned char fg, unsigned char b
 
 void kmain(void)
 {
-    print_message_beginning_fb("Hello World!", 2, 8);
+    // char* message = "Hello";
+    // print_message_beginning_fb(message, 2, 8);
+    fb_write_cell(0, 'H', 2, 8);
+    fb_write_cell(2, 'e', 2, 8);
+    fb_write_cell(4, 'l', 2, 8);
+    fb_write_cell(6, 'l', 2, 8);
+    fb_write_cell(8, 'o', 2, 8);
 }
