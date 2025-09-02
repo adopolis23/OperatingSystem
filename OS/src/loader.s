@@ -15,7 +15,7 @@ CHECKSUM equ -(MAGIC_NUMBER + FLAGS) ; calculate the checksum
 
 
 section .text: ; start of the text (code) section
-align 16 ; the code must be 4 (maybe 16?) byte aligned
+align 4 ; the code must be 4 (maybe 16?) byte aligned
     dd MAGIC_NUMBER ; write the magic number to the machine code,
     dd FLAGS ; the flags,
     dd CHECKSUM ; and the checksum
@@ -33,7 +33,7 @@ loader: ; the loader label (defined as entry point in linker script)
 
     ; loop forever do not exit
     .loop:
-    jmp .loop
+        jmp .loop
 
 
 
@@ -41,7 +41,7 @@ loader: ; the loader label (defined as entry point in linker script)
 KERNEL_STACK_SIZE equ 8192 ; size of stack in bytes
 
 section .bss
-align 16 ; align at 4 bytes
+align 4 ; align at 4 bytes
 
 kernel_stack: ; label points to beginning of memory
     resb KERNEL_STACK_SIZE ; reserve stack for the kernel

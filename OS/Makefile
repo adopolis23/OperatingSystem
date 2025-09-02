@@ -1,30 +1,27 @@
-# Makefile
-
 # Tools and flags
 AS = nasm
 ASFLAGS = -f elf32
 LD = ld
 CC = gcc
 LDFLAGS = -T src/link.ld -melf_i386
-CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs
+CFLAGS = -m32 -nostdlib -nostdinc -ffreestanding -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs
 
-# Files and directories
-AS_SRC = src/loader.s
-AS_OBJ = $(BUILD_DIR)/loader.o
 
-C_SRC = src/kmain.c
-C_OBJ = $(BUILD_DIR)/kmain.o
+# directories
+BUILD_DIR = build
+SRC_DIR = src
+
+# Files
+AS_SRC = $(SRC_DIR)/loader.s $(SRC_DIR)/io/io.s
+AS_OBJ = $(AS_SRC:$(SRC_DIR)/%.s=$(BUILD_DIR)/%.o)
+
+C_SRC = $(SRC_DIR)/kmain.c
+C_OBJ = $(C_SRC:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
 OBJS = $(AS_OBJ) $(C_OBJ)
 
-BUILD_DIR = build
-
 KERNEL = $(BUILD_DIR)/kernel.elf
 ISO = os.iso
-
-
-
-
 
 # Default target (build kernel)
 all: $(KERNEL)
@@ -33,12 +30,14 @@ all: $(KERNEL)
 $(KERNEL): $(OBJS) src/link.ld
 	$(LD) $(LDFLAGS) $(OBJS) -o $@
 
-# Assembling
-$(AS_OBJ): $(AS_SRC) | $(BUILD_DIR)
+# Assemble rule
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.s | $(BUILD_DIR)
+	@mkdir -p $(dir $@)
 	$(AS) $(ASFLAGS) -o $@ $<
 
-# Compiling C
-$(C_OBJ): $(C_SRC) | $(BUILD_DIR)
+# Compile C rule
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Ensure build directory exists

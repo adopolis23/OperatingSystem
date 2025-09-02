@@ -1,3 +1,4 @@
+#include "io/io.h"
 
 void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg)
 {
@@ -9,28 +10,20 @@ void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg)
     fb[i + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
 }
 
-void print_message_beginning_fb(char* message, unsigned char fg, unsigned char bg)
+void print_message_beginning_fb(const char* message, unsigned char fg, unsigned char bg)
 {
-    int index = 0;
-    int fb_index = 0;
-
-    while (message[index] != '\0')
+    unsigned int i = 0;
+    while (message[i] != '\0')
     {
-        fb_write_cell(fb_index, message[index], fg, bg);
-        index = index + 1;
-        fb_index = fb_index + 2;
+        fb_write_cell(i*2, message[i], fg, bg);
+        i++;
     }
-    
 }
+
 
 
 void kmain(void)
 {
-    // char* message = "Hello";
-    // print_message_beginning_fb(message, 2, 8);
-    fb_write_cell(0, 'H', 2, 8);
-    fb_write_cell(2, 'e', 2, 8);
-    fb_write_cell(4, 'l', 2, 8);
-    fb_write_cell(6, 'l', 2, 8);
-    fb_write_cell(8, 'o', 2, 8);
+    char* message = "Hello World!";  
+    print_message_beginning_fb(message, 0, 2);
 }
