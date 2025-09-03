@@ -14,7 +14,6 @@
 
     void outb(unsigned short port, unsigned char data);
 
-    //defined in header becuase too lazy to put in body
     void fb_move_cursor(unsigned short pos)
     {
         outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
@@ -54,7 +53,5 @@
             i++;
         }
     }
-
-
 
 #endif
