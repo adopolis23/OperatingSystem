@@ -50,8 +50,9 @@ void serial_configure_baud_rate(unsigned short com, unsigned short divisor)
     outb(SERIAL_DATA_PORT(com), divisor & 0x00FF);
 }
 
-void serial_configure_line(unsigned short com)
+void serial_configure(unsigned short com)
 {
     outb(SERIAL_LINE_COMMAND_PORT(com), 0x03);
     outb(SERIAL_FIFO_COMMAND_PORT(com), 0xC7);
+    outb(SERIAL_MODEM_COMMAND_PORT(com), 0x03);
 }

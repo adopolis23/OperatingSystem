@@ -58,7 +58,7 @@
     *
     * @param com The serial port to configure
     */
-    void serial_configure_line(unsigned short com);
+    void serial_configure(unsigned short com);
 
 
 #endif
