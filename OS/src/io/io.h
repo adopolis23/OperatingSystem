@@ -49,11 +49,16 @@
     * @param divisor The divisor
     */
 
-    void serial_configure_baud_rate(unsigned short com, unsigned short divisor)
-    {
-        outb(SERIAL_LINE_COMMAND_PORT(com), SERIAL_LINE_EXPECT_HIGHEST_FIRST);
-        outb(SERIAL_DATA_PORT(com), (divisor >> 8) & 0x00FF);
-        outb(SERIAL_DATA_PORT(com), divisor & 0x00FF);
-    }
+    void serial_configure_baud_rate(unsigned short com, unsigned short divisor);
+
+    /** serial_configure_line:
+    * Configures the line of the given serial port. The port is set to have a
+    * data length of 8 bits, no parity bits, one stop bit and break control
+    * disabled.
+    *
+    * @param com The serial port to configure
+    */
+    void serial_configure_line(unsigned short com);
+
 
 #endif
