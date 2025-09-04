@@ -15,7 +15,7 @@ SRC_DIR = src
 AS_SRC = $(SRC_DIR)/loader.s $(SRC_DIR)/io/io.s
 AS_OBJ = $(AS_SRC:$(SRC_DIR)/%.s=$(BUILD_DIR)/%.o)
 
-C_SRC = $(SRC_DIR)/kmain.c
+C_SRC = $(SRC_DIR)/kmain.c $(SRC_DIR)/io/io_c.c
 C_OBJ = $(C_SRC:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
 OBJS = $(AS_OBJ) $(C_OBJ)
