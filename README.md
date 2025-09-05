@@ -21,3 +21,53 @@ At its core, the kernel is simply a program in **ELF format**. GRUB loads this p
 
 
 The first of my own assembly code to get ran is in the `loader.s` file. The entry point is called loader and its purpose is to setup the stack and jump into the kernel C code entry point `kmain`.
+
+## Build Instructions
+
+### Tools Required
+- `nasm`
+- `ld`
+- `gcc`
+- `genisoimage`
+- `qemu`
+
+### Setup
+Download the GRUB stage2 bootloader file:  
+
+```bash
+wget -O stage2_eltorito https://github.com/littleosbook/littleosbook/raw/master/files/stage2_eltorito
+```
+
+In order to build just the kernel.elf run:
+```bash
+make
+```
+
+In order to build the full .iso run:
+```bash
+make iso
+```
+
+To clean build files:
+```bash
+make clean
+```
+
+## Run Instructions
+
+In order to run the iso in qemu run this command
+```bash
+qemu-system-i386 -cdrom os.iso
+```
+
+The following flag can be added to that command to allow debugging in the console, such as running `info registers` to view register contents.
+
+```bash
+-monitor stdio 
+```
+
+The following flag can be added to the command to view the output of the serial com port, this port is used for debugging information from the kernel.
+
+```bash
+-serial stdio 
+```
