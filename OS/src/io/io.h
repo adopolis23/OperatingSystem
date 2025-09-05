@@ -14,6 +14,8 @@
 
     void outb(unsigned short port, unsigned char data);
 
+    unsigned char inb(unsigned short port);
+
     void fb_move_cursor(unsigned short pos);
 
     void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg);
@@ -59,6 +61,15 @@
     * @param com The serial port to configure
     */
     void serial_configure(unsigned short com);
+
+    //returns 1 if transmit queue is empty
+    int serial_transmit_fifo_empty(unsigned short com);
+
+    void serial_write_char(unsigned short com, char c);
+
+    void serial_write_string(unsigned short com, const char* str);
+
+
 
 
 #endif

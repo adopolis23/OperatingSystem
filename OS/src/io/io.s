@@ -13,3 +13,9 @@ outb:
     mov dx, [esp + 4] ; move io port addr into dx
     out dx, al        ; send data to IO port
     ret               ; return to address at [esp]
+
+
+inb:
+    mov dx, [esp + 4]   ; move value of IO port into dx
+    in al, dx           ; read a byte from that port into al
+    ret
