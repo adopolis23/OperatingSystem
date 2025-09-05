@@ -1,44 +1,23 @@
+# Custom Operating System
 
-# Operating System
+This project is a simple operating system that I built **from scratch** using **Assembly** and **C**, this work takes guidance and inspiration from:  
 
-## Running with QEMU
+[*Operating Systems: Three Easy Pieces*](https://pages.cs.wisc.edu/~remzi/OSTEP/).
 
-when running with QEMU run with:
-```
-qemu-system-i386 -cdrom os.iso -monitor stdio
-```
-Then in terminal you can inspect registers with:
-```
-info registers
-```
+[*The Little Book About OS Development*](https://littleosbook.github.io/book.pdf).
 
-### Running with QEMU for com serial monitoring
-
-```
-qemu-system-x86_64 -serial stdio -cdrom os.iso
-```
-
-## Writing Text
-
-Text is written to the console with the `framebuffer` which is memory mapped IO. Starting address for the framebuffer is `0x000B8000`. Character in each cell is determined by 2 bytes (8: Char, 4: Foreground, 4: Background).
+The operating system uses **GRUB** as the bootloader, which is responsible for loading the kernel into memory during startup. From there, the kernel takes over execution and begins managing the system.  
 
 
-## Notes
 
-When creating structs for configuration bytes make sure packed attribute is set to avoid compiler GCC adding any padding.
-```C
-struct example {
-unsigned char config; /* bit 0 - 7 */
-unsigned short address; /* bit 8 - 23 */
-unsigned char index; /* bit 24 - 31 */
-} __attribute__((packed));
-```
+## Kernel Loading and Memory Layout
 
-Because there is no standard lib many flags need to be used when compiling.
+At its core, the kernel is simply a program in **ELF format**. GRUB loads this program into memory at specific addresses defined by the `link.ld` linker script.  
 
-`required`
--m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles
--nodefaultlibs
+- The kernel’s code is set to begin execution at **address `0x00100000`**, as specified in the linker script.  
+- Addresses below `0x00100000` are reserved for low-level functionality, such as:  
+  - **Memory-mapped I/O**  
+  - **Frame buffer writing** (both of which this OS utilizes).  
 
-`optional`
--Wall -Wextra -Werror
+
+The first of my own assembly code to get ran is in the `loader.s` file. The entry point is called loader and its purpose is to setup the stack and jump into the kernel C code entry point `kmain`.
