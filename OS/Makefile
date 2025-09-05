@@ -4,7 +4,9 @@ ASFLAGS = -f elf32
 LD = ld
 CC = gcc
 LDFLAGS = -T src/link.ld -melf_i386
-CFLAGS = -m32 -nostdlib -nostdinc -ffreestanding -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs
+
+#O0 means abso no optimization from the compiler
+CFLAGS = -m32 -nostdlib -nostdinc -ffreestanding -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -O0
 
 
 # directories

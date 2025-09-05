@@ -1,4 +1,5 @@
 #include "utility.h"
+#include "../io/io.h"
 
 void itoa_hex(unsigned int value, char* buffer)
 {
@@ -19,4 +20,15 @@ void itoa_hex(unsigned int value, char* buffer)
     //null terminate
     buffer[10] = '\0';
 
+}
+
+//this is not working right
+void serial_write_sp()
+{
+    unsigned int sp = get_sp();
+    char buf[11];
+    itoa_hex(sp, buf);
+    serial_write_string(SERIAL_COM1_BASE, "ESP = ");
+    serial_write_string(SERIAL_COM1_BASE, buf);
+    serial_write_string(SERIAL_COM1_BASE, "\n");
 }
