@@ -1,5 +1,7 @@
 #include "io/io.h"
 #include "utility/utility.h"
+#include "utility/data_types.h"
+#include "memory/global_descriptor_table.h"
 
 
 void kmain(void)
@@ -23,8 +25,17 @@ void kmain(void)
 
     //_end is defined in the linker script as the end of the kernel after the .bss section 
     extern char _end;
-    unsigned int kernel_end = (unsigned int) &_end;
-    itoa_hex(kernel_end, buf);
-    serial_write_string(SERIAL_COM1_BASE, "Kernel end at: ");
-    serial_write_string(SERIAL_COM1_BASE, buf);
+    itoa_hex((unsigned int) &_end, buf);
+    serial_log_msg("Kernel end at: ", buf);
+
+    //initialize the FLAT gdp
+    gdt_init();
+
+    itoa_hex(gdt_p.base, buf);
+    serial_log_msg("Base of GDT at: ", buf);
+
+    while(1)
+    {
+        //spin
+    }
 }

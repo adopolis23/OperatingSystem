@@ -32,3 +32,10 @@ void serial_write_sp()
     serial_write_string(SERIAL_COM1_BASE, buf);
     serial_write_string(SERIAL_COM1_BASE, "\n");
 }
+
+void serial_log_msg(const char* msg, const char* value)
+{
+    serial_write_string(SERIAL_COM1_BASE, msg);
+    serial_write_string(SERIAL_COM1_BASE, value);
+    serial_write_string(SERIAL_COM1_BASE, "\n");
+}

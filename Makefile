@@ -14,10 +14,14 @@ BUILD_DIR = build
 SRC_DIR = src
 
 # Files
-AS_SRC = $(SRC_DIR)/loader.s $(SRC_DIR)/io/io.s $(SRC_DIR)/utility/utility.s
+AS_SRC = $(SRC_DIR)/loader.s $(SRC_DIR)/io/io.s $(SRC_DIR)/utility/utility.s $(SRC_DIR)/memory/global_descriptor_table.s \
+$(SRC_DIR)/interrupt/interrupt.s
+
 AS_OBJ = $(AS_SRC:$(SRC_DIR)/%.s=$(BUILD_DIR)/%.o)
 
-C_SRC = $(SRC_DIR)/kmain.c $(SRC_DIR)/io/io_c.c $(SRC_DIR)/utility/utility_c.c
+C_SRC = $(SRC_DIR)/kmain.c $(SRC_DIR)/io/io_c.c $(SRC_DIR)/utility/utility_c.c $(SRC_DIR)/memory/global_descriptor_table_c.c \
+$(SRC_DIR)/interrupt/interrupt_c.c
+
 C_OBJ = $(C_SRC:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
 OBJS = $(AS_OBJ) $(C_OBJ)
@@ -46,6 +50,9 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
+
+stage2_eltorito:
+	wget -O stage2_eltorito https://github.com/littleosbook/littleosbook/raw/master/files/stage2_eltorito
 
 #wget -O stage2_eltorito https://github.com/littleosbook/littleosbook/raw/master/files/stage2_eltorito
 # Build ISO

@@ -10,4 +10,6 @@
     //preceded by a 0x
     void itoa_hex(unsigned int value, char* buffer);
 
+    void serial_log_msg(const char* msg, const char* value);
+
 #endif
