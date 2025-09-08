@@ -34,6 +34,10 @@ void kmain(void)
     itoa_hex(gdt_p.base, buf);
     serial_log_msg("Base of GDT at: ", buf);
 
+
+    
+
+
     while(1)
     {
         //spin

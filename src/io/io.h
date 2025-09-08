@@ -12,18 +12,9 @@
     #define FB_HIGH_BYTE_COMMAND 14
     #define FB_LOW_BYTE_COMMAND 15
 
-    void outb(unsigned short port, unsigned char data);
-
-    unsigned char inb(unsigned short port);
-
-    void fb_move_cursor(unsigned short pos);
-
-    void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg);
-
-    void print_message_beginning_fb(const char* message, unsigned char fg, unsigned char bg);
-
-    void clear_screen_after_position(unsigned int pos);
-
+    /* Define keyboard data port */
+    #define KBD_DATA_PORT 0x60
+    
     //configure the serial ports
     /* All the I/O ports are calculated relative to the data port. This is because
     * all serial ports (COM1, COM2, COM3, COM4) have their ports in the same
@@ -36,11 +27,28 @@
     #define SERIAL_MODEM_COMMAND_PORT(base) (base + 4)
     #define SERIAL_LINE_STATUS_PORT(base) (base + 5)
 
-    /* SERIAL_LINE_EXPECT_HIGHEST_FIRST:
+     /* SERIAL_LINE_EXPECT_HIGHEST_FIRST:
     * Tells the serial port to expect first the highest 8 bits on the data port,
     * then the lowest 8 bits will follow
     */
     #define SERIAL_LINE_EXPECT_HIGHEST_FIRST 0x80
+
+
+
+
+
+
+    void outb(unsigned short port, unsigned char data);
+
+    unsigned char inb(unsigned short port);
+
+    void fb_move_cursor(unsigned short pos);
+
+    void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg);
+
+    void print_message_beginning_fb(const char* message, unsigned char fg, unsigned char bg);
+
+    void clear_screen_after_position(unsigned int pos);
 
     /** serial_configure_baud_rate:
     * Sets the speed of the data being sent. The default speed of a serial
@@ -70,6 +78,8 @@
     void serial_write_string(unsigned short com, const char* str);
 
 
+    // interaction with keyboard
+    unsigned char read_scan_code(void);
 
 
 #endif

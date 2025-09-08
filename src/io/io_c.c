@@ -83,3 +83,10 @@ void serial_write_string(unsigned short com, const char* str)
         serial_write_char(com, *str++);
     }
 }
+
+
+//read the scan code from the keyboard data port
+unsigned char read_scan_code(void)
+{
+    return inb(KBD_DATA_PORT);
+}

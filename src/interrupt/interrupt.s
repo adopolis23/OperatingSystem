@@ -4,8 +4,10 @@ extern interrupt_handler
 
 
 
+common_interrupt_handler:
 
-common_inturrupt_handler:
+    mov ecx, [esp]          ; ecx = handler_push_size
+    mov edx, [esp+4]        ; int number
 
     ; allocate space for cpu_state
     sub esp, 36
@@ -22,12 +24,12 @@ common_inturrupt_handler:
 
     ; prepare stack_state pointer
     ; stack_state is already pushed by CPU
-    ; here esp + 36 means look past the cpu state we just pushed, +4 means look past the error code and then will be
+    ; here esp + 36 means look past the cpu state we just pushed, +(4+ecx) means look past the error code and then will be
     ; moving the start address of the stack state struct into eax
-    mov eax, [esp + 36 + 4]   
+    mov eax, [esp + 36 + 4 + ecx]   
     
     ; push arguments for C function (right-to-left)
-    push dword [esp + 36]     ; interrupt number (already pushed in assembly handler)
+    push edx                    ; interrupt number (already pushed in assembly handler)
     push eax                   ; pointer to stack_state
     push esp                   ; pointer to cpu_state
 
@@ -48,7 +50,32 @@ common_inturrupt_handler:
     mov ds, [esp + 32]
     mov es, [esp + 36]
 
-    ; remove interrupt number & error code
-    add esp, 8
+    ; remove interrupt number & error code & arg count
+    add esp, 12
 
     iret
+
+
+
+
+
+; Individual handlers
+
+global interrupt_handler_0
+interrupt_handler_0:
+    push dword 8           ; tell the common int handler error code and int number pushed 
+    push dword 0           ; fake error code
+    push dword 0           ; interrupt number
+    jmp common_interrupt_handler
+
+
+
+
+; load_idt - Loads the interrupt descriptor table (IDT).
+; stack: [esp + 4] the address of the first entry in the IDT
+; [esp ] the return address
+global load_idt
+load_idt:
+    mov eax, [esp+4] ; load the address of the IDT into register eax
+    lidt [eax] ; load the IDT
+    ret ; return to the calling function
