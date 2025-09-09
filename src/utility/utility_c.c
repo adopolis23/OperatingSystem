@@ -39,3 +39,44 @@ void serial_log_msg(const char* msg, const char* value)
     serial_write_string(SERIAL_COM1_BASE, value);
     serial_write_string(SERIAL_COM1_BASE, "\n");
 }
+
+
+void int_to_str(int value, char *str) {
+    char buffer[12]; // enough for -2,147,483,648 + '\0'
+    int i = 0, j = 0;
+    int is_negative = 0;
+
+    if (value == 0) {
+        str[0] = '0';
+        str[1] = '\0';
+        return;
+    }
+
+    if (value < 0) {
+        is_negative = 1;
+        value = -value;
+    }
+
+    // extract digits in reverse order
+    while (value > 0) {
+        buffer[i++] = (value % 10) + '0';
+        value /= 10;
+    }
+
+    if (is_negative) {
+        buffer[i++] = '-';
+    }
+
+    // reverse into output string
+    while (i > 0) {
+        str[j++] = buffer[--i];
+    }
+    str[j] = '\0';
+}
+
+void serial_debug_hex(uint32_t value)
+{
+    char buff[12];
+    itoa_hex(value, buff);
+    serial_log_msg("DEBUG HEX: ", buff);
+}

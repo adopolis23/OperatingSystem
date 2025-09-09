@@ -2,12 +2,17 @@
 
 extern interrupt_handler
 
+extern serial_debug_hex
 
 
 common_interrupt_handler:
 
-    mov ecx, [esp]          ; ecx = handler_push_size
-    mov edx, [esp+4]        ; int number
+    mov edi, [esp]        ; int number
+    mov esi, [esp+8]          ; ecx = handler_push_size
+
+    ; push edx
+    ; call serial_debug_hex
+    ; add esp, 4
 
     ; allocate space for cpu_state
     sub esp, 36
@@ -22,16 +27,23 @@ common_interrupt_handler:
     mov [esp + 32], ds
     mov [esp + 36], es
 
+    mov ebx, [esp] ; pointer to cpu state
+
     ; prepare stack_state pointer
     ; stack_state is already pushed by CPU
     ; here esp + 36 means look past the cpu state we just pushed, +(4+ecx) means look past the error code and then will be
     ; moving the start address of the stack state struct into eax
-    mov eax, [esp + 36 + 4 + ecx]   
+    mov eax, [esp + 36 + 4 + esi]    ; pointer to stack state
     
+    ;mov edx, edi
+    push edi
+    call serial_debug_hex
+    add esp, 4
+
     ; push arguments for C function (right-to-left)
-    push edx                    ; interrupt number (already pushed in assembly handler)
+    push edi                    ; interrupt number (already pushed in assembly handler)
     push eax                   ; pointer to stack_state
-    push esp                   ; pointer to cpu_state
+    push ebx                   ; pointer to cpu_state
 
     call interrupt_handler
 
@@ -43,7 +55,7 @@ common_interrupt_handler:
     mov ebx, [esp + 4]
     mov ecx, [esp + 8]
     mov edx, [esp + 12]
-    mov esi, [esp + 16]
+    mov esi, [esp + 16] 
     mov edi, [esp + 20]
     mov ebp, [esp + 24]
     mov esp, [esp + 28]
@@ -69,6 +81,12 @@ interrupt_handler_0:
     jmp common_interrupt_handler
 
 
+global interrupt_handler_33
+interrupt_handler_33:
+    push dword 8 ; length of args
+    push dword 0 ; error code
+    push dword 33; int number
+    jmp common_interrupt_handler
 
 
 ; load_idt - Loads the interrupt descriptor table (IDT).

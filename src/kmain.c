@@ -2,6 +2,7 @@
 #include "utility/utility.h"
 #include "utility/data_types.h"
 #include "memory/global_descriptor_table.h"
+#include "interrupt/interrupt.h"
 
 
 void kmain(void)
@@ -30,12 +31,13 @@ void kmain(void)
 
     //initialize the FLAT gdp
     gdt_init();
-
     itoa_hex(gdt_p.base, buf);
     serial_log_msg("Base of GDT at: ", buf);
 
-
-    
+    //initialize the IDT
+    idt_init_all();
+    itoa_hex(idt_ptr.base, buf);
+    serial_log_msg("Base of IDT at: ", buf);
 
 
     while(1)

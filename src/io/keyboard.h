@@ -7,10 +7,10 @@
 
 
 #define SHIFT_PRESSED1 0x2A
-#define SHIFT_PRESSED1 0x36
+#define SHIFT_PRESSED2 0x36
 
 #define SHIFT_RELEASED1 0xAA
-#define SHIFT_RELEASED1 0xB6
+#define SHIFT_RELEASED2 0xB6
 
 
 // simple keymap for US layout, set 1 scan codes
