@@ -4,6 +4,7 @@
 #include "../utility/data_types.h"
 #include "../io/io.h"
 #include "../utility/utility.h"
+#include "../io/keyboard.h"
 
 #define IDT_ENTRIES 256
 

@@ -71,3 +71,9 @@ The following flag can be added to the command to view the output of the serial 
 ```bash
 -serial stdio 
 ```
+
+The following command can be run to stop auto reboot and view a dump on a crash
+
+```bash
+qemu-system-i386 -cdrom os.iso -serial stdio -no-reboot -d int
+```

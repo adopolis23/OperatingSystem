@@ -5,26 +5,14 @@ struct idt_ptr idt_ptr;
 
 void interrupt_handler(struct cpu_state* cpu, struct stack_state* stack, unsigned int interrupt)
 {
-    //serial_write_string(SERIAL_COM1_BASE, "DEBUG: Common Interrupt Handler Triggered.\n");
-    char buff[12];
-    itoa_hex(interrupt, buff);
-    serial_log_msg("DEBUG: Common Interrupt Handler Triggered: ", buff);
+    serial_write_string(SERIAL_COM1_BASE, "DEBUG: Common Interrupt Handler Triggered.\n");
 
     if (interrupt == 0x21)
     {
         serial_write_string(SERIAL_COM1_BASE, "DEBUG: Keyboard Interrupt Handler Triggered.\n");
+        keyboard_handler();
     }
 
-
-    //need to find out what this does.
-    // if (interrupt >= 40) {
-    //     outb(0xA0, 0x20); // slave
-    // }
-    // outb(0x20, 0x20);     // master
-
-    //this might be equal to above
-    //do not need to do this if done in the keyboard handler
-    pic_acknowledge(interrupt);
 
 }
 
@@ -79,6 +67,7 @@ void pic_acknowledge(unsigned int interrupt)
         outb(PIC1_PORT_A, PIC_ACK);
     } else {
         outb(PIC2_PORT_A, PIC_ACK);
+        outb(PIC1_PORT_A, PIC_ACK);
     }
 }
 

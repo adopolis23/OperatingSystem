@@ -42,6 +42,7 @@ void kmain(void)
 
     while(1)
     {
+        //serial_write_string(SERIAL_COM1_BASE, "KERNEL: Spinning...\n");
         //spin
     }
 }

@@ -15,7 +15,7 @@ common_interrupt_handler:
     ; add esp, 4
 
     ; allocate space for cpu_state
-    sub esp, 36
+    sub esp, 40
     mov [esp + 0], eax
     mov [esp + 4], ebx
     mov [esp + 8], ecx
@@ -24,16 +24,17 @@ common_interrupt_handler:
     mov [esp + 20], edi
     mov [esp + 24], ebp
     mov [esp + 28], esp
-    mov [esp + 32], ds
-    mov [esp + 36], es
+    mov [esp + 32], word ds
+    mov [esp + 36], word es
 
-    mov ebx, [esp] ; pointer to cpu state
+    ; this aparently needs to be lea not mov
+    lea ebx, [esp] ; pointer to cpu state
 
     ; prepare stack_state pointer
     ; stack_state is already pushed by CPU
     ; here esp + 36 means look past the cpu state we just pushed, +(4+ecx) means look past the error code and then will be
     ; moving the start address of the stack state struct into eax
-    mov eax, [esp + 36 + 4 + esi]    ; pointer to stack state
+    mov eax, [esp + 40 + 4 + esi]    ; pointer to stack state
     
     ;mov edx, edi
     push edi
@@ -51,16 +52,21 @@ common_interrupt_handler:
     add esp, 12
 
     ; restore cpu_state registers
-    mov eax, [esp + 0]
-    mov ebx, [esp + 4]
-    mov ecx, [esp + 8]
-    mov edx, [esp + 12]
-    mov esi, [esp + 16] 
-    mov edi, [esp + 20]
-    mov ebp, [esp + 24]
-    mov esp, [esp + 28]
-    mov ds, [esp + 32]
-    mov es, [esp + 36]
+    lea ecx, [ebx]          ; ecx = cpu_state*
+    mov eax, [ecx + 0]
+    mov ebx, [ecx + 4]
+    mov ecx, [ecx + 8]
+    mov edx, [ecx + 12]     ; note: careful with using ecx; if worried, use different regs for temp
+    mov esi, [ecx + 16]
+    mov edi, [ecx + 20]
+    mov ebp, [ecx + 24]
+    ; restore segment registers (read as words)
+    mov ax, [ebx + 32]      ; if ebx still points to frame
+    mov ds, ax
+    mov ax, [ebx + 36]
+    mov es, ax
+
+    add esp, 40
 
     ; remove interrupt number & error code & arg count
     add esp, 12
