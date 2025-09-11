@@ -4,4 +4,4 @@ timeout=1
 title BrandonOS
 kernel /boot/kernel.elf
 
-module /modules/program
+module /boot/modules/program

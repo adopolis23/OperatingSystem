@@ -3,8 +3,11 @@ global loader
 extern kmain ;external kernel entry point
 
 MAGIC_NUMBER equ 0x1BADB002
-FLAGS equ 0x0 ; multiboot flags
-CHECKSUM equ -(MAGIC_NUMBER + FLAGS) ; calculate the checksum
+ALIGN_MODULES equ 0x00000001
+;FLAGS equ 0x0 ; multiboot flags
+
+
+CHECKSUM equ -(MAGIC_NUMBER + ALIGN_MODULES) ; calculate the checksum
 ; (magic number + checksum + flags should equal 0)
 
 
@@ -17,7 +20,7 @@ CHECKSUM equ -(MAGIC_NUMBER + FLAGS) ; calculate the checksum
 section .text: ; start of the text (code) section
 align 4 ; the code must be 4 (maybe 16?) byte aligned
     dd MAGIC_NUMBER ; write the magic number to the machine code,
-    dd FLAGS ; the flags,
+    dd ALIGN_MODULES ; the flags,
     dd CHECKSUM ; and the checksum
 
 
@@ -27,6 +30,11 @@ loader: ; the loader label (defined as entry point in linker script)
     ; set up the stack pointer by setting esp to the base of the kernel stack plus the stack size 
     ; I think would give you address right after .bss section
     mov esp, kernel_stack + KERNEL_STACK_SIZE
+
+    ; since we are loading another program with grub, grub will store the base address of that program in ebx
+    ; so we will push ebx onto the stack to use as an argument for kmain.
+    sub esp, 4
+    mov [esp], ebx
 
     ; call into kernel main function
     call kmain
