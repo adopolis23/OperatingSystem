@@ -76,4 +76,8 @@ void idt_init_all()
     pic_remap();
     idt_init();
     asm volatile ("sti");  // enable interrupts
+
+    char buf[11];
+    itoa_hex(idt_ptr.base, buf);
+    serial_log_msg("Base of IDT at: ", buf);
 }

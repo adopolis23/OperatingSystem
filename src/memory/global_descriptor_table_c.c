@@ -32,4 +32,8 @@ void gdt_init()
 
     //defined in global_descriptor_table.s
     gdt_flush((uint32_t)&gdt_p);
+
+    char buf[11];
+    itoa_hex(gdt_p.base, buf);
+    serial_log_msg("Base of GDT at: ", buf);
 }

@@ -2,6 +2,8 @@
 #define GLOBAL_DESCRIPTOR_H
 
 #include "../utility/data_types.h"
+#include "../io/io.h"
+#include "../utility/utility.h"
 
 
 //defines an entry for the global descriptor table using a packed struct

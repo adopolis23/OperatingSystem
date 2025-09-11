@@ -12,11 +12,6 @@ void kmain(void)
     //log to serial port com1 - does not decrement sp
     serial_write_string(SERIAL_COM1_BASE, "Entry into kernel kmain successful\n");
 
-    unsigned int sp = get_sp();
-    itoa_hex(sp, buf);
-    serial_write_string(SERIAL_COM1_BASE, "ESP = ");
-    serial_write_string(SERIAL_COM1_BASE, buf);
-    serial_write_string(SERIAL_COM1_BASE, "\n");
 
 
     //print message in the frame buffer
@@ -29,20 +24,20 @@ void kmain(void)
     itoa_hex((unsigned int) &_end, buf);
     serial_log_msg("Kernel end at: ", buf);
 
+
     //initialize the FLAT gdp
     gdt_init();
-    itoa_hex(gdt_p.base, buf);
-    serial_log_msg("Base of GDT at: ", buf);
+    // itoa_hex(gdt_p.base, buf);
+    // serial_log_msg("Base of GDT at: ", buf);
 
     //initialize the IDT
     idt_init_all();
-    itoa_hex(idt_ptr.base, buf);
-    serial_log_msg("Base of IDT at: ", buf);
+    // itoa_hex(idt_ptr.base, buf);
+    // serial_log_msg("Base of IDT at: ", buf);
 
 
     while(1)
     {
-        //serial_write_string(SERIAL_COM1_BASE, "KERNEL: Spinning...\n");
         //spin
     }
 }

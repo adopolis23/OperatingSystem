@@ -66,6 +66,7 @@ common_interrupt_handler:
     mov ax, [ebx + 36]
     mov es, ax
 
+    ; clean up what was allocated for the cpu state
     add esp, 40
 
     ; remove interrupt number & error code & arg count
