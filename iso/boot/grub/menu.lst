@@ -1,5 +1,7 @@
 default=0
 timeout=1
 
-title os
+title BrandonOS
 kernel /boot/kernel.elf
+
+module /modules/program
