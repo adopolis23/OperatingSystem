@@ -37,9 +37,9 @@ common_interrupt_handler:
     mov eax, [esp + 40 + 4 + esi]    ; pointer to stack state
     
     ;mov edx, edi
-    push edi
-    call serial_debug_hex
-    add esp, 4
+    ;push edi
+    ;call serial_debug_hex
+    ;add esp, 4
 
     ; push arguments for C function (right-to-left)
     push edi                    ; interrupt number (already pushed in assembly handler)

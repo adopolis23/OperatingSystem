@@ -1,4 +1,6 @@
 #include "io/io.h"
+#include "io/screen.h"
+#include "kshell/kshell.h"
 #include "utility/utility.h"
 #include "utility/data_types.h"
 #include "memory/global_descriptor_table.h"
@@ -16,9 +18,9 @@ void kmain(unsigned int ebx)
 
 
     //print message in the frame buffer
-    char* message = "Hello World!";  
-    print_message_beginning_fb(message, 0, 2);
-    clear_screen_after_position(12);
+    //char* message = "Hello World!";  
+    //clear_screen();
+    //print_message_beginning_fb(message, 0, 2);
 
     //_end is defined in the linker script as the end of the kernel after the .bss section 
     itoa_hex((unsigned int) &_end, buf);
@@ -31,32 +33,33 @@ void kmain(unsigned int ebx)
     idt_init_all();
 
 
+    init_kshell();
 
 
-    //find pointer to loaded program
-    multiboot_info_t* mbinfo = (multiboot_info_t*) ebx;
+    // //find pointer to loaded program
+    // multiboot_info_t* mbinfo = (multiboot_info_t*) ebx;
     
-    //checks if one module loaded and the modules info bit is valid in bit 3
-    if (mbinfo->mods_count != 1 || !(mbinfo->flags & 0x8))
-    {
-        serial_write_string(SERIAL_COM1_BASE, "Error loading GRUB module\n");
+    // //checks if one module loaded and the modules info bit is valid in bit 3
+    // if (mbinfo->mods_count != 1 || !(mbinfo->flags & 0x8))
+    // {
+    //     serial_write_string(SERIAL_COM1_BASE, "Error loading GRUB module\n");
 
-        itoa_hex((unsigned int) mbinfo->mods_count, buf);
-        serial_log_msg("Mods Count: ", buf);
+    //     itoa_hex((unsigned int) mbinfo->mods_count, buf);
+    //     serial_log_msg("Mods Count: ", buf);
 
-        itoa_hex((unsigned int) mbinfo->flags, buf);
-        serial_log_msg("Flags: ", buf);
-    }
-    unsigned int address_of_module = mbinfo->mods_addr;
+    //     itoa_hex((unsigned int) mbinfo->flags, buf);
+    //     serial_log_msg("Flags: ", buf);
+    // }
+    // unsigned int address_of_module = mbinfo->mods_addr;
     
-    //itoa_hex(address_of_module, buf);
-    //serial_log_msg("Address of Module: ", buf);
+    // //itoa_hex(address_of_module, buf);
+    // //serial_log_msg("Address of Module: ", buf);
 
-    ///starting program
-    typedef void (*call_module_t)(void);
-    call_module_t start_program = (call_module_t) address_of_module;
-    start_program();
-    //program must return to get to here;
+    // ///starting program
+    // typedef void (*call_module_t)(void);
+    // call_module_t start_program = (call_module_t) address_of_module;
+    // start_program();
+    // //program must return to get to here;
 
 
 

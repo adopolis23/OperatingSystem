@@ -5,11 +5,15 @@ struct idt_ptr idt_ptr;
 
 void interrupt_handler(struct cpu_state* cpu, struct stack_state* stack, unsigned int interrupt)
 {
-    serial_write_string(SERIAL_COM1_BASE, "DEBUG: Common Interrupt Handler Triggered.\n");
+    #ifndef RELEASE_BUILD
+        serial_write_string(SERIAL_COM1_BASE, "DEBUG: Common Interrupt Handler Triggered.\n");
+    #endif
 
     if (interrupt == 0x21)
     {
-        serial_write_string(SERIAL_COM1_BASE, "DEBUG: Keyboard Interrupt Handler Triggered.\n");
+        #ifndef RELEASE_BUILD
+            serial_write_string(SERIAL_COM1_BASE, "DEBUG: Keyboard Interrupt Handler Triggered.\n");
+        #endif
         keyboard_handler();
     }
 

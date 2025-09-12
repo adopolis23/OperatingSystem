@@ -13,12 +13,22 @@
 #define SHIFT_RELEASED1 0xAA
 #define SHIFT_RELEASED2 0xB6
 
+#define KEY_MAP_SIZE 128
+#define KEY_BUFFER_SIZE 16
 
 // simple keymap for US layout, set 1 scan codes
-extern unsigned char keymap[128];
+extern unsigned char keymap[KEY_MAP_SIZE];
+
+extern unsigned char key_buffer[KEY_BUFFER_SIZE];
+
+//mark these as volatile to avoid compiler optimization
+extern volatile unsigned int key_buffer_head;
+extern volatile unsigned int key_buffer_tail;
 
 
 void keyboard_handler();
+
+char get_key();
 
 
 #endif

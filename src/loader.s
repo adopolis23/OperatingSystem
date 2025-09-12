@@ -3,7 +3,7 @@ global loader
 extern kmain ;external kernel entry point
 
 MAGIC_NUMBER equ 0x1BADB002
-ALIGN_MODULES equ 0x00000001
+ALIGN_MODULES equ 0x00000000
 ;FLAGS equ 0x0 ; multiboot flags
 
 

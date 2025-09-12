@@ -42,13 +42,6 @@
 
     unsigned char inb(unsigned short port);
 
-    void fb_move_cursor(unsigned short pos);
-
-    void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg);
-
-    void print_message_beginning_fb(const char* message, unsigned char fg, unsigned char bg);
-
-    void clear_screen_after_position(unsigned int pos);
 
     /** serial_configure_baud_rate:
     * Sets the speed of the data being sent. The default speed of a serial
