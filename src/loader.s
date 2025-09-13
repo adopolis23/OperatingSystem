@@ -33,8 +33,8 @@ loader: ; the loader label (defined as entry point in linker script)
 
     ; since we are loading another program with grub, grub will store the base address of that program in ebx
     ; so we will push ebx onto the stack to use as an argument for kmain.
-    sub esp, 4
-    mov [esp], ebx
+    push ebx
+    push eax
 
     ; call into kernel main function
     call kmain

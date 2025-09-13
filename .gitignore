@@ -7,3 +7,4 @@ stage2_eltorito
 build
 *.iso
 .vscode
+test_program

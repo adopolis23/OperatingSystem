@@ -9,7 +9,7 @@
 #include "io/keyboard.h"
 
 
-void kmain(unsigned int ebx)
+void kmain(uint32_t magic, multiboot_info_t* mbinfo)
 {
     char buf[11];
     extern char _end;
@@ -32,44 +32,33 @@ void kmain(unsigned int ebx)
 
     //initialize the IDT
     idt_init_all();
+    
+    itoa_hex((unsigned int) mbinfo, buf);
+    serial_log_msg("MBI at: ", buf);
+    
 
+    
+    // load and jump into external program.
+    // right now this program only loads 0xDEADBEEF into eax.
+    if (mbinfo->mods_count > 0) {
+        multiboot_module_t* mods = (multiboot_module_t*) mbinfo->mods_addr;
+        
+        uint32_t start = mods[0].mod_start;
+        uint32_t end   = mods[0].mod_end;
+        
+        // for testing, dump the first byte
+        unsigned char* prog = (unsigned char*) start;
+        
+        typedef void (*prog_entry_t)(void);
+        prog_entry_t entry = (prog_entry_t) start;
 
-    //init_kshell();
-
-    clear_screen();
-    while (1) {
-        char input = get_char();
-        if (input != '*') {
-            fb_write_cell(10, input, COLOR_WHITE, COLOR_BLACK);
-        }
+        entry();   // jump into program   
     }
-
-
-    // //find pointer to loaded program
-    // multiboot_info_t* mbinfo = (multiboot_info_t*) ebx;
+    //program must return to get to here;
     
-    // //checks if one module loaded and the modules info bit is valid in bit 3
-    // if (mbinfo->mods_count != 1 || !(mbinfo->flags & 0x8))
-    // {
-    //     serial_write_string(SERIAL_COM1_BASE, "Error loading GRUB module\n");
 
-    //     itoa_hex((unsigned int) mbinfo->mods_count, buf);
-    //     serial_log_msg("Mods Count: ", buf);
-
-    //     itoa_hex((unsigned int) mbinfo->flags, buf);
-    //     serial_log_msg("Flags: ", buf);
-    // }
-    // unsigned int address_of_module = mbinfo->mods_addr;
-    
-    // //itoa_hex(address_of_module, buf);
-    // //serial_log_msg("Address of Module: ", buf);
-
-    // ///starting program
-    // typedef void (*call_module_t)(void);
-    // call_module_t start_program = (call_module_t) address_of_module;
-    // start_program();
-    // //program must return to get to here;
-
+    //init the kernel shell for text communication with kernel
+    init_kshell();
 
 
     while(1)

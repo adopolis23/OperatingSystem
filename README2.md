@@ -1,23 +1,6 @@
 
 # Operating System
 
-## Running with QEMU
-
-when running with QEMU run with:
-```
-qemu-system-i386 -cdrom os.iso -monitor stdio
-```
-Then in terminal you can inspect registers with:
-```
-info registers
-```
-
-### Running with QEMU for com serial monitoring
-
-```
-qemu-system-x86_64 -serial stdio -cdrom os.iso
-```
-
 ## Writing Text
 
 Text is written to the console with the `framebuffer` which is memory mapped IO. Starting address for the framebuffer is `0x000B8000`. Character in each cell is determined by 2 bytes (8: Char, 4: Foreground, 4: Background).
