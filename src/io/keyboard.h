@@ -4,6 +4,7 @@
 #include "io.h"
 #include "../utility/data_types.h"
 #include "../interrupt/interrupt.h"
+#include "../io/screen.h"
 
 #define KEYBOARD_INT 0x21
 
@@ -28,7 +29,7 @@ extern volatile unsigned int key_buffer_tail;
 
 void keyboard_handler();
 
-char get_key();
+char get_char();
 
 
 #endif

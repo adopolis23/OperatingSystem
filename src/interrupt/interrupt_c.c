@@ -5,11 +5,11 @@ struct idt_ptr idt_ptr;
 
 void interrupt_handler(struct cpu_state* cpu, struct stack_state* stack, unsigned int interrupt)
 {
+
     if (interrupt == 0x21)
     {
         keyboard_handler();
     }
-
 
 }
 

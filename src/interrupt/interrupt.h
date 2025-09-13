@@ -22,6 +22,15 @@
 #define PIC_ACK 0x20
 
 
+static inline void cli(void) {
+    __asm__ __volatile__("cli" ::: "memory");
+}
+
+static inline void sti(void) {
+    __asm__ __volatile__("sti" ::: "memory");
+}
+
+
 // Represents the full CPU state pushed by pusha instruction or manually
 struct cpu_state {
     uint32_t eax;

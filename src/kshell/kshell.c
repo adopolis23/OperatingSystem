@@ -18,22 +18,26 @@ void init_kshell()
 
 void run()
 {
-    char input;
+    char input = 0;
 
     while (1)
     {
-        // wait until a key is available
-        input = get_key();
-        if (input == 0)
+        
+        for (int i = 0; i < 1000000; i++)
         {
-            //asm volatile("hlt"); 
-            continue;
+            int x = 0;
+            int y = 1;
+            int z = x + y * 2;
         }
 
-        // got input
-        serial_log_msg("Got Key: ", (char[2]){ input, '\0' });
+        input = get_char();
 
-        screen_write_position(cur_row, cur_col, input, COLOR_WHITE, COLOR_BLACK);
-        cur_col = (cur_col + 1) % SCREEN_COLS;
+        // if (input != 0)
+        // {
+        //     serial_log_msg("Char: ", (char[2]){ input, '\0' });
+        //     screen_write_position(1, 1, input, COLOR_WHITE, COLOR_BLACK);
+        //     //serial_write_string(SERIAL_COM1_BASE, "DEBUG\n");
+        // }
+
     }
 }

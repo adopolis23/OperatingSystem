@@ -6,6 +6,7 @@
 #include "memory/global_descriptor_table.h"
 #include "interrupt/interrupt.h"
 #include "multiboot/multiboot.h"
+#include "io/keyboard.h"
 
 
 void kmain(unsigned int ebx)
@@ -33,7 +34,15 @@ void kmain(unsigned int ebx)
     idt_init_all();
 
 
-    init_kshell();
+    //init_kshell();
+
+    clear_screen();
+    while (1) {
+        char input = get_char();
+        if (input != '*') {
+            fb_write_cell(10, input, COLOR_WHITE, COLOR_BLACK);
+        }
+    }
 
 
     // //find pointer to loaded program

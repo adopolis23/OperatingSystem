@@ -46,7 +46,7 @@ loader: ; the loader label (defined as entry point in linker script)
 
 
 
-KERNEL_STACK_SIZE equ 8192 ; size of stack in bytes
+KERNEL_STACK_SIZE equ 16384 ; size of stack in bytes
 
 section .bss
 align 4 ; align at 4 bytes
