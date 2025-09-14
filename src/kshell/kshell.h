@@ -16,7 +16,11 @@ extern unsigned int cur_col;
 
 void init_kshell();
 
-void advance_cursor_right();
+void advance_column();
+
+void print_shell_intro();
+
+void put_char(char c);
 
 void write_cursor();
 

@@ -61,4 +61,10 @@ void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg)
     fb[i + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
 }
 
+void move_cursor_position(unsigned int row, unsigned int col)
+{
+    unsigned int cell = (row*SCREEN_COLS + col) * 2;
+    fb_move_cursor(cell);
+}
+
 

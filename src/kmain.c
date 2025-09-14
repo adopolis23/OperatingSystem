@@ -17,12 +17,6 @@ void kmain(uint32_t magic, multiboot_info_t* mbinfo)
     //log to serial port com1 - does not decrement sp
     serial_write_string(SERIAL_COM1_BASE, "Entry into kernel kmain successful\n");
 
-
-    //print message in the frame buffer
-    //char* message = "Hello World!";  
-    //clear_screen();
-    //print_message_beginning_fb(message, 0, 2);
-
     //_end is defined in the linker script as the end of the kernel after the .bss section 
     itoa_hex((unsigned int) &_end, buf);
     serial_log_msg("Kernel end at: ", buf);

@@ -38,7 +38,7 @@ void keyboard_handler()
 
 char get_char()
 {
-    char c = '*';
+    char c = 0;
 
     sti();
 

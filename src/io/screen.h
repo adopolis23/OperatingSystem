@@ -22,6 +22,8 @@ void clear_screen_after_position(unsigned int pos);
 
 void fb_move_cursor(unsigned short pos);
 
+void move_cursor_position(unsigned int row, unsigned int col);
+
 void screen_write_position(unsigned int row, unsigned int col, char c, unsigned char fg, unsigned char bg);
 
 void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg);

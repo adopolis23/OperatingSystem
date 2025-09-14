@@ -10,30 +10,44 @@ void init_kshell()
 {
     clear_screen();
 
+    print_shell_intro();
+
     run();
 }
 
-void advance_cursor_right()
+void advance_column()
 {
     cur_col = (cur_col + 1) % SCREEN_COLS;
 }
 
-void write_cursor()
+void print_shell_intro()
 {
-
+    put_char('$');
+    put_char('>');
+    put_char(' ');
 }
 
+void put_char(char c)
+{
+    screen_write_position(cur_row, cur_col, c, COLOR_BLACK, COLOR_WHITE);
+    move_cursor_position(cur_row, (cur_col+1)%SCREEN_COLS);
+
+    advance_column();
+}
 
 void run()
 {
     while (1) {
 
         char input = get_char();
-        if (input != '*') {
-            //fb_write_cell(10, input, COLOR_WHITE, COLOR_BLACK);
-            screen_write_position(cur_row, cur_col, input, COLOR_WHITE, COLOR_BLACK);
 
-            advance_cursor_right();
+        if (input != 0) {
+
+            char buff[11];
+            itoa_hex((unsigned int) input, buff);
+            serial_log_msg("Char: ", buff);
+
+            put_char(input);
         }
 
     }
