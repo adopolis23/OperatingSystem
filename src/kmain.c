@@ -27,10 +27,10 @@ void kmain(uint32_t magic, multiboot_info_t* mbinfo)
     //initialize the IDT
     idt_init_all();
     
+
+    
     itoa_hex((unsigned int) mbinfo, buf);
     serial_log_msg("MBI at: ", buf);
-    
-
     
     // load and jump into external program.
     // right now this program only loads 0xDEADBEEF into eax.

@@ -27,6 +27,15 @@ void print_shell_intro()
     put_char(' ');
 }
 
+void new_line()
+{
+    //set cursor to first position of next line
+    cur_col = 0;
+    cur_row = (cur_row + 1) % SCREEN_ROWS;
+
+    print_shell_intro();
+}
+
 void put_char(char c)
 {
     screen_write_position(cur_row, cur_col, c, COLOR_BLACK, COLOR_WHITE);
@@ -46,6 +55,12 @@ void run()
             char buff[11];
             itoa_hex((unsigned int) input, buff);
             serial_log_msg("Char: ", buff);
+
+            if (input == '\n')
+            {
+                new_line();
+                continue;
+            }
 
             put_char(input);
         }

@@ -20,6 +20,8 @@ void advance_column();
 
 void print_shell_intro();
 
+void new_line();
+
 void put_char(char c);
 
 void write_cursor();
