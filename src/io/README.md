@@ -11,3 +11,5 @@ The two most basic functions here are `inb` and `outb`. inb reads data from a po
 Data can now be writted to a port with the `void serial_write_char(unsigned short com, char c)` function. 
 
 The default port specified is the `COM1` port. This ports base address is at `0x3F8` and other addresses for this port can be calculated from there.
+
+The functions `write_char` and `write_string` can then be used to communicate with the serial port.
