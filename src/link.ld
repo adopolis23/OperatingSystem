@@ -1,13 +1,13 @@
 ENTRY(loader) /* the name of the entry label */
 
 SECTIONS {
-    . = 0x00100000; /* the code should be loaded at 1 MB */
 
     /* Multiboot header must be in the first 8 KiB */
-    .multiboot ALIGN(0x1000) : 
-    {
-        *(.multiboot)
+    .multiboot ALIGN(4) : {
+        KEEP(*(.multiboot))
     }
+    
+    . = 0x00100000; /* the code should be loaded at 1 MB */
 
     .text ALIGN (0x1000) : /* align at 4 KB */
     {

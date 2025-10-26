@@ -9,7 +9,7 @@
 #include "io/keyboard.h"
 
 
-void kmain(uint32_t magic, multiboot_info_t* mbinfo)
+void kmain(uint32_t magic_number, multiboot_info_t* mbinfo)
 {
     char buf[11];
     extern char _end;
@@ -26,30 +26,47 @@ void kmain(uint32_t magic, multiboot_info_t* mbinfo)
 
     //initialize the IDT
     idt_init_all();
-    
 
-    
-    itoa_hex((unsigned int) mbinfo, buf);
-    serial_log_msg("MBI at: ", buf);
-    
-    // load and jump into external program.
-    // right now this program only loads 0xDEADBEEF into eax.
-    if (mbinfo->mods_count > 0) {
-        multiboot_module_t* mods = (multiboot_module_t*) mbinfo->mods_addr;
-        
-        uint32_t start = mods[0].mod_start;
-        uint32_t end   = mods[0].mod_end;
-        
-        // for testing, dump the first byte
-        unsigned char* prog = (unsigned char*) start;
-        
-        typedef void (*prog_entry_t)(void);
-        prog_entry_t entry = (prog_entry_t) start;
 
-        entry();   // jump into program   
+    if (magic_number != MULTIBOOT_BOOTLOADER_MAGIC)
+    {
+        serial_write_string(SERIAL_COM1_BASE, "Multiboot (GRUB) Error, Magic number not correct!\n");
     }
-    //program must return to get to here;
-    
+    else
+    {
+
+        if (mbinfo->flags & MULTIBOOT_INFO_MEM_MAP)
+        {
+            multiboot_memory_map_t* mmap = (multiboot_memory_map_t*) mbinfo->mmap_addr;
+
+            uint64_t total_mem = 0;
+
+            //multiboot_uint64_t test = (multiboot_uint64_t)mmap;
+
+        }
+        
+        itoa_hex((unsigned int) mbinfo, buf);
+        serial_log_msg("MBI at: ", buf);
+        
+        // load and jump into external program.
+        // right now this program only loads 0xDEADBEEF into eax.
+        if (mbinfo->mods_count > 0) {
+            multiboot_module_t* mods = (multiboot_module_t*) mbinfo->mods_addr;
+            
+            uint32_t start = mods[0].mod_start;
+            uint32_t end   = mods[0].mod_end;
+            
+            // for testing, dump the first byte
+            unsigned char* prog = (unsigned char*) start;
+            
+            typedef void (*prog_entry_t)(void);
+            prog_entry_t entry = (prog_entry_t) start;
+            
+            entry();   // jump into program   
+        }
+        //program must return to get to here;
+        
+    }
 
     //init the kernel shell for text communication with kernel
     init_kshell();
