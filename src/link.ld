@@ -1,20 +1,17 @@
 ENTRY(loader) /* the name of the entry label */
 
 SECTIONS {
-
+ 
     . = 0x00100000; /* the code should be loaded at 1 MB */
 
-    /* Multiboot header must be in the first 8 KiB */
-    .multiboot ALIGN(4) : {
+    .text ALIGN(4) : {
+        /* Put the multiboot header as first bytes of the first loadable segment */
         KEEP(*(.multiboot))
-    }
+        KEEP(*(.multiboot*))
+        *(.text*)
 
-    .text ALIGN (0x1000) : /* align at 4 KB */
-    {
-    *(.text) /* all text sections from all files */
-
-    /* This trick here allows me to use char* string litterals by putting my ro data into my text area.*/
-    *(.rodata*)
+        /* This trick here allows me to use char* string litterals by putting my ro data into my text area.*/
+        *(.rodata*)
     }
 
     .data ALIGN (0x1000) : /* align at 4 KB */

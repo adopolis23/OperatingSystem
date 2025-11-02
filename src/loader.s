@@ -11,7 +11,7 @@ CHECKSUM equ -(MAGIC_NUMBER + ALIGN_MODULES) ; calculate the checksum
 ; (magic number + checksum + flags should equal 0)
 
 
-section .multiboot: ; start of the multiboot section
+section .multiboot ; start of the multiboot section
 align 4 ; the code must be 4 (maybe 16?) byte aligned
     dd MAGIC_NUMBER ; write the magic number to the machine code,
     dd ALIGN_MODULES ; the flags,
