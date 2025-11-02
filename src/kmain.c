@@ -27,8 +27,6 @@ void kmain(uint32_t magic_number, multiboot_info_t* mbinfo)
     //initialize the IDT
     idt_init_all();
 
-    int x = 0;
-
 
     if (magic_number != MULTIBOOT_BOOTLOADER_MAGIC)
     {
@@ -40,10 +38,26 @@ void kmain(uint32_t magic_number, multiboot_info_t* mbinfo)
         if (mbinfo->flags & MULTIBOOT_INFO_MEM_MAP)
         {
             multiboot_memory_map_t* mmap = (multiboot_memory_map_t*) mbinfo->mmap_addr;
+            uint32_t mmap_end = (uint32_t)mmap + mbinfo->mmap_length;
 
             uint64_t total_mem = 0;
+            
+            while ((uint32_t)mmap < mmap_end)
+            {
 
-            //multiboot_uint64_t test = (multiboot_uint64_t)mmap;
+                serial_write_string(SERIAL_COM1_BASE, "******\nMemory Segment Found\n");
+
+                itoa_hex((unsigned int) mmap->addr, buf);
+                serial_log_msg("Adress: ", buf);
+                
+                itoa_hex((unsigned int) mmap->len, buf);
+                serial_log_msg("Length: ", buf);
+
+                total_mem = total_mem + mmap->len;
+
+                //add the size of each region of the memory map
+                mmap = (multiboot_memory_map_t*) ((uint32_t)mmap + mmap->size + sizeof(mmap->size));
+            }
 
         }
         
