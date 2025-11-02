@@ -27,6 +27,8 @@ void kmain(uint32_t magic_number, multiboot_info_t* mbinfo)
     //initialize the IDT
     idt_init_all();
 
+    int x = 0;
+
 
     if (magic_number != MULTIBOOT_BOOTLOADER_MAGIC)
     {
